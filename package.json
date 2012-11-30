@@ -27,7 +27,7 @@
     "dependencies" : {
         "optimist" : "~0.3.4",
         "upnode" : "~0.3.1",
-        "pushover" : "~0.1.4",
+        "pushover" : "git+https://github.com/machadogj/pushover.git",
         "mkdirp" : "~0.3.3",
         "which": "*"
     },
