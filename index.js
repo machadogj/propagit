@@ -2,7 +2,8 @@ var upnode = require('upnode');
 var pushover = require('pushover');
 var mkdirp = require('mkdirp');
 var spawn = require('child_process').spawn;
-
+var which = require('which').sync;
+var gitCommand = which('git');
 var createWebServer = require('./lib/web');
 
 var fs = require('fs');
@@ -302,9 +303,10 @@ Propagit.prototype.drone = function (fn) {
     
     actions.fetch = function (repo, cb) {
         var p = refs(repo);
-        runCmd([ 'git', 'init', self.repodir ], function (err) {
+
+        runCmd([ gitCommand, 'init', self.repodir ], function (err) {
             if (err) return cb(err);
-            runCmd([ 'git', 'fetch', p.origin ], { cwd : self.repodir }, cb);
+            runCmd([ gitCommand, 'fetch', p.origin ], { cwd : self.repodir }, cb);
         });
     };
     
@@ -321,10 +323,10 @@ Propagit.prototype.drone = function (fn) {
             process.env.COMMIT = commit;
             process.env.REPO = repo;
             
-            runCmd([ 'git', 'clone', self.repodir, dir ], function (err) {
+            runCmd([ gitCommand, 'clone', self.repodir, dir ], function (err) {
                 if (err) return cb(err);
                 
-                runCmd([ 'git', 'checkout', commit ], { cwd : dir },
+                runCmd([ gitCommand, 'checkout', commit ], { cwd : dir },
                 function (err) {
                     if (err) return cb(err);
                     self.emit('deploy', {
